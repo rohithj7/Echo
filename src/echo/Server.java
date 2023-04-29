@@ -53,7 +53,7 @@ public class Server {
             handler = (RequestHandler) handlerType.newInstance();
             handler.setSocket(s);
         } catch(Exception e) {
-            System.err.println(e.getMessage() + "Not possible");
+            System.err.println(e.getMessage());
         }
         return handler;
 

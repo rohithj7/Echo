@@ -34,31 +34,31 @@ public class SecurityHandler extends ProxyHandler {
 
     protected String response(String request) throws Exception {
 
-        String result = "";
-
         if(loggedIn) {
-            result = super.response(request);
+            return super.response(request);
         } else {
             String[] tokens = request.split("\\s+");
             if(tokens[0].equalsIgnoreCase("new")) {
-                if(search(tokens[1]) != null) {
-                    result = "User name taken";
-                } else {
+                loggedIn = false;
+                if(search(tokens[1]) == null) {
                     update(tokens[1], tokens[2]);
-                    result = "Account created";
+                    return "Account created";
+                } else {
+                    return "User not found";
                 }
             } else if(tokens[0].equalsIgnoreCase("login")) {
                 if(search(tokens[1]).equals(tokens[2])) {
                     loggedIn = true;
-                    result = "Login successful";
+                    return "Login successful";
                 } else {
-                    result = "Login failed";
+                    loggedIn = false;
+                    return "Login failed";
                 }
             } else {
-                result = "Please log in";
+                loggedIn = false;
+                return "Please log in";
             }
         }
-        return result;
 
     }
 

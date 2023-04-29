@@ -15,7 +15,7 @@ public class CacheHandler extends ProxyHandler {
     protected String response(String request) throws Exception {
         String string = SafeTable.search(request);
         if (string != null) {
-            System.out.println("Found in safetable");
+            System.out.println("Found in cache");
             return string;
         }
         else {

@@ -37,9 +37,10 @@ public class RequestHandler extends Correspondent implements Runnable {
                     shutDown();
                     break;
                 }
-                System.out.println("sending: " + response(request));
-                send(response(request));
-                Thread.sleep(20);
+                String response = response(request);
+                System.out.println("sending: " + response);
+                send(response);
+                Thread.sleep(300);
                 // send response
                 // sleep
             } catch(Exception e) {
