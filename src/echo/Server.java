@@ -11,17 +11,12 @@ public class Server {
     protected int myPort;
     public static boolean DEBUG = true;
 
-    protected PrintWriter stdout;
     protected Class<?> handlerType;
 
     public Server(int port, String handlerType) {
-        stdout = new PrintWriter(
-                new BufferedWriter(
-                        new OutputStreamWriter(System.out)), true);
         try {
             myPort = port;
             mySocket = new ServerSocket(myPort);
-            stdout.println("Server listening at port " + port);
             this.handlerType = (Class.forName(handlerType));
         } catch(Exception e) {
             System.err.println(e.getMessage());
@@ -39,6 +34,7 @@ public class Server {
                 RequestHandler handler = makeHandler(socket);
                 Thread t = new Thread(handler); // put element in thread
                 t.start(); // start calls the run method of the element since its elements are runnable
+                System.out.println("Server listening at port " + myPort);
             } catch(Exception e) {
                 System.err.println(e.getMessage());
                 System.exit(1);
@@ -52,20 +48,15 @@ public class Server {
 
     public RequestHandler makeHandler(Socket s) {
 
+        RequestHandler handler = new RequestHandler(s);;
         try {
-            RequestHandler handler = (RequestHandler) handlerType.newInstance();
-            try {
-                handlerType.getDeclaredConstructor().newInstance();
-            } catch (InvocationTargetException e) {
-                throw new RuntimeException(e);
-            }
+            handler = (RequestHandler) handlerType.newInstance();
             handler.setSocket(s);
-            return handler;
         } catch(Exception e) {
-            System.err.println(e.getMessage());
-            System.exit(1);
+            System.err.println(e.getMessage() + "Not possible");
         }
-        return null;
+        return handler;
+
         // handler = a new instance of handlerType
         //    use: try { handlerType.getDeclaredConstructor().newInstance() } catch ...
         // set handler's socket to s
@@ -75,7 +66,7 @@ public class Server {
 
 
     public static void main(String[] args) {
-        int port = 5555;
+        int port = 4646;
         String service = "echo.RequestHandler";
 
         if (1 <= args.length) {

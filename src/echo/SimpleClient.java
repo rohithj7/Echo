@@ -32,7 +32,7 @@ public class SimpleClient extends Correspondent {
                 if (DEBUG) stdout.println("sending: " + msg);
                 send(msg);
                 msg = receive();
-                stdout.println("received: " + msg);
+                stdout.println(msg);
             } catch(IOException e) {
                 stderr.println(e.getMessage());
                 break;
